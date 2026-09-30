@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" translate="no" class="notranslate">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SR7 WEB CLONER</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
+        body { background-color: #0a0a0c; color: white; font-family: sans-serif; overflow-x: hidden; }
+    </style>
+</head>
+<body class="flex justify-center min-h-screen selection:bg-cyan-500/30">
+
+<div class="fixed top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/20 rounded-full blur-[120px] pointer-events-none"></div>
+<div class="fixed bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-cyan-400/20 rounded-full blur-[120px] pointer-events-none"></div>
+
+<div class="w-full max-w-md min-h-screen flex flex-col relative z-10">
+    <header class="flex items-center justify-between px-6 pt-12 pb-6 backdrop-blur-xl bg-black/40 border-b border-white/5 sticky top-0 z-30">
+        <div class="flex items-center gap-2">
+            <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center shadow-[0_0_20px_rgba(59,130,246,0.5)]">
+                <i data-lucide="zap" class="text-white w-5 h-5"></i>
+            </div>
+            <div>
+                <h1 class="text-xl font-extrabold tracking-tight">SR7 WEB CLONER</h1>
+                <p class="text-[10px] font-bold text-cyan-400 tracking-widest uppercase">By Developer SR7 Mods</> </p>
+            </div>
+        </div>
+        <button onclick="toggleAbout(true)" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 active:scale-90 transition-all duration-300">
+            <i data-lucide="info" class="text-white w-5 h-5"></i>
+        </button>
+    </header>
+
+    <main class="flex-1 px-6 py-8 flex flex-col gap-6">
+        <div class="flex items-center justify-center">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 shadow-[0_0_15px_rgba(59,130,246,0.2)]">
+                <i data-lucide="sparkles" class="text-blue-400 w-3.5 h-3.5"></i>
+                <span class="text-xs font-bold text-blue-400 tracking-wider">PREMIUM PHP BUILD</span>
+            </div>
+        </div>
+
+        <div class="p-6 rounded-[32px] bg-white/5 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)] flex flex-col gap-5">
+            <h2 class="text-lg font-bold text-white/90">TARGET WEBSITE</h2>
+            <div class="relative group">
+                <i data-lucide="globe" class="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-cyan-400 transition-colors w-5 h-5"></i>
+                <input type="text" id="urlInput" placeholder="WWW.EXAMPLE.COM" class="w-full bg-black/40 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-sm font-bold text-white placeholder:text-white/30 focus:outline-none focus:border-cyan-500/50 focus:shadow-[0_0_20px_rgba(34,211,238,0.2)] transition-all duration-300">
+            </div>
+            <button id="cloneBtn" onclick="handleClone()" class="w-full relative overflow-hidden group bg-gradient-to-r from-blue-600 to-cyan-500 rounded-2xl py-4 flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(59,130,246,0.4)] active:scale-[0.97] transition-all duration-300">
+                <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
+                <i data-lucide="code" id="btnIcon" class="text-white relative z-10 w-5 h-5"></i>
+                <i data-lucide="loader-2" id="btnLoader" class="text-white relative z-10 w-5 h-5 animate-spin hidden"></i>
+                <span id="btnText" class="text-sm font-bold text-white tracking-widest relative z-10">EXTRACT SOURCE</span>
+            </button>
+        </div>
+
+        <div id="errorBox" class="hidden px-5 py-4 rounded-2xl bg-red-500/10 border border-red-500/20 items-center gap-3">
+            <i data-lucide="shield-alert" class="text-red-400 shrink-0 w-5 h-5"></i>
+            <p id="errorText" class="text-xs font-bold text-red-400 leading-relaxed"></p>
+        </div>
+
+        <div id="resultBox" class="hidden flex-1 flex-col gap-4 animate-[fadeIn_0.5s_ease-out]">
+            <div class="flex items-center justify-between px-2">
+                <h2 class="text-sm font-bold text-white/60">EXTRACTED CODE</h2>
+                <span class="text-xs font-bold px-2 py-1 bg-green-500/20 text-green-400 rounded-lg">SUCCESS</span>
+            </div>
+            <div class="flex-1 relative rounded-[32px] bg-black/60 border border-white/10 overflow-hidden min-h-[250px]">
+                <textarea id="codeArea" readonly class="absolute inset-0 w-full h-full bg-transparent p-6 text-[10px] font-mono text-cyan-50/70 resize-none focus:outline-none custom-scrollbar" spellcheck="false"></textarea>
+                <div class="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-black/80 to-transparent pointer-events-none"></div>
+            </div>
+            <button onclick="downloadCode()" class="w-full bg-white text-black rounded-2xl py-4 flex items-center justify-center gap-2 shadow-[0_0_30px_rgba(255,255,255,0.2)] active:scale-[0.97] transition-all duration-300">
+                <i data-lucide="download" class="w-5 h-5"></i>
+                <span class="text-sm font-extrabold tracking-widest">DOWNLOAD .HTML</span>
+            </button>
+        </div>
+    </main>
+
+    <footer class="py-6 flex flex-col items-center justify-center gap-1 opacity-50">
+        <p class="text-[10px] font-bold tracking-widest">© 2026 DEVELOPER SR7MODS </> </p>
+        <p class="text-[8px] font-bold tracking-widest text-cyan-500">ULTRA UI FRAMEWORK</p>
+    </footer>
+
+    <div id="aboutModal" class="hidden fixed inset-0 z-50 flex items-end justify-center sm:items-center">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="toggleAbout(false)"></div>
+        <div class="relative w-full max-w-md bg-[#121214] border border-white/10 rounded-t-[40px] sm:rounded-[40px] p-8 shadow-[0_-20px_50px_rgba(0,0,0,0.5)] transition-transform duration-300 translate-y-full" id="aboutContent">
+            <div class="absolute top-3 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-white/20 rounded-full sm:hidden"></div>
+            <div class="flex justify-between items-center mb-8 mt-2 sm:mt-0">
+                <h2 class="text-xl font-extrabold tracking-wider">ABOUT SYSTEM</h2>
+                <button onclick="toggleAbout(false)" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center active:scale-90 transition-transform">
+                    <i data-lucide="x" class="w-4 h-4 text-white"></i>
+                </button>
+            </div>
+            <div class="space-y-6">
+                <div class="p-5 rounded-3xl bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border border-blue-500/20">
+                    <h3 class="text-xs font-bold text-blue-400 tracking-widest mb-2">DEVELOPER</h3>
+                    <p class="text-2xl font-extrabold text-white">SR7MODS </> </p>
+                    <p class="text-xs font-bold text-white/50 mt-1 uppercase">Lead Systems Architect</p>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5">
+                        <span class="text-xs font-bold tracking-wider text-white/60">VERSION</span>
+                        <span class="text-xs font-bold text-cyan-400">ULTRA v2.0 PHP</span>
+                    </div>
+                    <div class="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5">
+                        <span class="text-xs font-bold tracking-wider text-white/60">CORE TECH</span>
+                        <span class="text-xs font-bold text-cyan-400">PHP + TAILWIND</span>
+                    </div>
+                    <div class="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5">
+                        <span class="text-xs font-bold tracking-wider text-white/60">HOSTING</span>
+                        <span class="text-xs font-bold text-cyan-400">INFINITYFREE</span>
+                    </div>
+                </div>
+                <button onclick="toggleAbout(false)" class="w-full bg-white/10 hover:bg-white/20 text-white rounded-2xl py-4 mt-4 font-bold tracking-widest active:scale-95 transition-all">
+                    CLOSE PANEL
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+
+<script>
+    lucide.createIcons();
+    let extractedCode = '';
+
+    function toggleAbout(show) {
+        const modal = document.getElementById('aboutModal');
+        const content = document.getElementById('aboutContent');
+        if (show) {
+            modal.classList.remove('hidden');
+            setTimeout(() => content.classList.remove('translate-y-full'), 10);
+        } else {
+            content.classList.add('translate-y-full');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+    }
+
+    async function handleClone() {
+        let url = document.getElementById('urlInput').value.trim();
+        const btnIcon = document.getElementById('btnIcon');
+        const btnLoader = document.getElementById('btnLoader');
+        const btnText = document.getElementById('btnText');
+        const errorBox = document.getElementById('errorBox');
+        const errorText = document.getElementById('errorText');
+        const resultBox = document.getElementById('resultBox');
+        const codeArea = document.getElementById('codeArea');
+
+        errorBox.classList.add('hidden');
+        errorBox.classList.remove('flex');
+        resultBox.classList.add('hidden');
+        resultBox.classList.remove('flex');
+        extractedCode = '';
+
+        if (!url) {
+            errorText.innerText = 'PLEASE ENTER A VALID URL';
+            errorBox.classList.remove('hidden');
+            errorBox.classList.add('flex');
+            return;
+        }
+
+        btnIcon.classList.add('hidden');
+        btnLoader.classList.remove('hidden');
+        btnText.innerText = 'CLONING...';
+        document.getElementById('cloneBtn').disabled = true;
+
+        try {
+           
+            const response = await fetch(`?fetch_url=${encodeURIComponent(url)}`);
+            const data = await response.json();
+            
+            if (data.contents) {
+                extractedCode = data.contents;
+                codeArea.value = extractedCode;
+                resultBox.classList.remove('hidden');
+                resultBox.classList.add('flex');
+            } else if (data.error) {
+                throw new Error(data.error);
+            }
+        } catch (err) {
+            errorText.innerText = err.message || 'CLONING FAILED. SERVER ERROR DETECTED.';
+            errorBox.classList.remove('hidden');
+            errorBox.classList.add('flex');
+        } finally {
+            btnIcon.classList.remove('hidden');
+            btnLoader.classList.add('hidden');
+            btnText.innerText = 'EXTRACT SOURCE';
+            document.getElementById('cloneBtn').disabled = false;
+        }
+    }
+
+    function downloadCode() {
+        if (!extractedCode) return;
+        const blob = new Blob([extractedCode], { type: 'text/html' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        let url = document.getElementById('urlInput').value.trim();
+        const domain = url.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "").split('/')[0];
+        link.download = `${domain || 'cloned_site'}.html`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
+</body>
+</html>
